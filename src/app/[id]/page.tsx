@@ -7,12 +7,12 @@ import {Input} from "@/ui/input/input";
 import {IpArea} from "@/components/ip-area/ip-area";
 import {Button} from "@/ui/button/button";
 import {formatIpAddress} from "@/utils/formatIpAddres";
-import {useRouter} from "next/navigation";
+import {useRouter, usePathname} from "next/navigation";
 
 
 export default function Settings() {
-    const id = window.location.pathname.split('/').pop()
     const router = useRouter()
+    const id = usePathname()
 
 
     const [formData, setFormData] = useState({
