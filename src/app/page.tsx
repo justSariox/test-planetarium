@@ -47,7 +47,7 @@ const Factories = () => {
             <div className={s.container}>
                 <h1 className={s.pageTitle}>Заводы</h1>
                 <form onSubmit={handleSubmit}>
-                    <Input className={s.input} value={name} onChange={handleChangeTitle} children={'+'}/>
+                    <Input className={s.input} value={name} onChange={handleChangeTitle} >+</Input>
                 </form>
                 <FactoriesList factories={factories} setFactories={setFactories}/>
             </div>
