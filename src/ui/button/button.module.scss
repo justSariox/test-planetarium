@@ -1,0 +1,34 @@
+@mixin button {
+  cursor: pointer;
+
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: 105px;
+  height: 27px;
+  border: none;
+  border-radius: 27px;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.primary {
+  @include button;
+
+  background-color: #51AB32;
+  color: #fff
+}
+
+.secondary {
+  @include button;
+
+  background-color: #4A4A4A;
+  color: #fff;
+  box-shadow: 0 4px 4px 0 #00000040;
+}
+

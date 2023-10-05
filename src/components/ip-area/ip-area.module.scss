@@ -1,0 +1,24 @@
+.areaWrapper {
+  display: flex;
+  gap: 55px;
+
+  .inputsWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    .ipInput {
+      width: 76px;
+      height: 30px;
+      text-align: center;
+    }
+    .ipSeparator {
+      color: #fff;
+      margin-top: 30px;
+    }
+  }
+}
+
+
+
+

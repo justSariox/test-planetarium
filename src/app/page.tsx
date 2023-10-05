@@ -1,95 +1,58 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import s from './page.module.scss'
+import {IFactory} from "@/models/types";
+import {useState, useEffect, ChangeEvent, FormEvent} from "react";
+import {Input} from "@/ui/input/input";
+import {FactoriesList} from "@/components/factories-list/factories-list";
+import {getFactories} from "@/utils/getFactories";
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+const Factories = () => {
+    const [factories, setFactories] = useState<IFactory[]>([])
+    const [name, setName] = useState<string>('')
+    const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setName(e.currentTarget.value)
+    }
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+    const AddNewFactoriesHandler = async (name: string) => {
+        try {
+            await fetch('api/factories/', {
+                method: 'POST',
+                body: JSON.stringify({name}),
+                headers: {'Content-Type': 'application/json'}
+            })
+            const data = await getFactories()
+            setFactories(data)
+            setName('')
+        } catch (e) {
+            throw new Error('something went wrong')
+        }
+    }
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        await AddNewFactoriesHandler(name);
+    };
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getFactories();
+            setFactories(data);
+        }
+        fetchData().then(() => console.log('success'));
+    }, [])
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+    return (
+        <main>
+            <div className={s.container}>
+                <h1 className={s.pageTitle}>Заводы</h1>
+                <form onSubmit={handleSubmit}>
+                    <Input className={s.input} value={name} onChange={handleChangeTitle} children={'+'}/>
+                </form>
+                <FactoriesList factories={factories} setFactories={setFactories}/>
+            </div>
+        </main>
+    )
+};
+
+export default Factories;
